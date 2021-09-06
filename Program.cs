@@ -33,6 +33,7 @@ namespace EFT_DLV_Grabber
                     //File.ReadLines("").Any(line => line.Contains("eft-store.com/client/live/updates/") && line.Contains(".update"));
                     foreach (var line in File.ReadAllLines(fileList[i]))
                     {
+                        // older then 12.11 logs finder
                         if (line.Contains("Start downloading file") && line.Contains("eft-store.com/client/live/updates/") && line.Contains(".update"))
                         {
                             int start = line.IndexOf("http://");
@@ -55,6 +56,21 @@ namespace EFT_DLV_Grabber
                                 string[] splitted = replacedLine.Split('/');
                                 string endstring = splitted[splitted.Length - 1];
                                 current.Add(endstring);
+                            }
+                        }
+                        // 12.11+ logs finder
+                        if (text2.Contains("(DWN") && text2.Contains("/client/live/updates/") && text2.Contains(".update "))
+                        {
+                            int num = text2.IndexOf("/client/live/updates/");
+                            int num2 = text2.IndexOf(".update ");
+                            if (num != -1 && num2 != -1)
+                            {
+                                string[] array2 = text2.Substring(num, num2 - num).Split(new char[]
+                                {
+                                    '/'
+                                });
+                                string item = array2[array2.Length - 2];
+                                list2.Add(item);
                             }
                         }
                     }
